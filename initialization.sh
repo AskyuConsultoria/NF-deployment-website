@@ -1,7 +1,24 @@
      #!/bin/bash
-    sudo apt update -y
-    sudo apt upgrade -y
-    sudo apt install docker -y 
+     sudo apt-get update -y && sudo apt-get upgrade -y
+
+     sudo apt-get update
+     sudo apt-get install ca-certificates curl
+     sudo install -m 0755 -d /etc/apt/keyrings
+     sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+     sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+     
+     echo \
+     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+      $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+     sudo apt-get update
+
+
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     git clone https://github.com/AskyuConsultoria/Gestio-front-api.git
-    sudo docker run --name website -d -p 80:80 install_website .
-  
+    sudo docker build image -t website-image -f install_website.dockerfile
+    sudo docker run --name website-container -d -p 80:80 website-image 
+
+
+
